@@ -1,10 +1,9 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.basket.ProductBasket;
-import org.skypro.skyshop.product.DiscountedProduct;
-import org.skypro.skyshop.product.FixPriceProduct;
-import org.skypro.skyshop.product.Product;
-import org.skypro.skyshop.product.SimpleProduct;
+import org.skypro.skyshop.product.*;
+
+import java.util.Arrays;
 
 public class App {
     static ProductBasket newBasket = new ProductBasket();
@@ -26,6 +25,17 @@ public class App {
         newBasket.printBasket();
         newBasket.getBasketPrice();
         System.out.println(newBasket.checkProduct("Carrot"));
+        //hw#3
+        SearchEngine poisk = new SearchEngine(5);
+        Article text1 = new Article("Energy drink", "Red bull is most popular energy drink in the world.");
+        Article text2 = new Article("Glasses", "Rayban is most popular glasses in the world.");
+        Article text3 = new Article("Car", "One of the most popular car is Toyota from Japan.");
+        poisk.add(text1);
+        poisk.add(text2);
+        poisk.add(text3);
+        System.out.println(Arrays.toString(poisk.search("popular")));
+        System.out.println();
+        System.out.println(Arrays.toString(poisk.search("Japan")));
 
 
     }

@@ -30,4 +30,38 @@ public class SearchEngine {
         }
 
     }
+
+    public Searchable getMostSuitableObject(String str) throws BestResultFound {
+        int mostSuitableIndex = -1;
+        int count = 0;
+        for (int i = 0; i < mass.length; i++) {
+            //Пустые элементы пролистываем.
+            if (mass[i] == null) {
+                continue;
+            }
+
+            //Берем строку объекта Searchable из массива. Создаем счетчик вхождений.
+            int tempCount = 0;
+            StringBuilder s = new StringBuilder(mass[i].getSearchTerm());
+            int tempIndex = s.indexOf(str);
+            //Через цикл считаем количество вхождений искомой строки
+            while (tempIndex != -1) {
+                tempCount++;
+                s.delete(0, tempIndex);
+                tempIndex = s.indexOf(str, tempIndex);
+            }
+            //Если количество вхождений больше, чем запомненное по предыдущим элементам - переприсваемся.
+            if (count < tempCount) {
+                mostSuitableIndex = i;
+                count = tempCount;
+            }
+        }
+        //Если не найдено ниодного вхождения строки ни в одном элементе - выбрасываем исключение.
+        if (mostSuitableIndex != -1) {
+            return mass[mostSuitableIndex];
+        } else {
+            throw new BestResultFound(String.format("Строка %s не найдена", str));
+        }
+
+    }
 }

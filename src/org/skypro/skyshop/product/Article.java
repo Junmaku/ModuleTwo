@@ -11,9 +11,15 @@ public final class Article implements Searchable {
         return this.text;
     }
 
-    public Article(String TITLE, String TEXT) {
-        this.title = TITLE;
-        this.text = TEXT;
+    public Article(String title, String text) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Поле 'title' не может быть пустым.");
+        }
+        if (text == null || text.trim().isEmpty()) {
+            throw new IllegalArgumentException("Поле 'text' не может быть пустым.");
+        }
+        this.title = title;
+        this.text = text;
     }
 
     @Override

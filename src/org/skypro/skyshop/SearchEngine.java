@@ -1,48 +1,35 @@
 package org.skypro.skyshop;
 
-public class SearchEngine {
-    private int size;
-    private Searchable[] mass;
+import java.util.ArrayList;
 
-    public SearchEngine(int size) {
-        this.size = size;
-        this.mass = new Searchable[size];
+public class SearchEngine {
+    private ArrayList<Searchable> mass;
+
+    public SearchEngine() {
+        this.mass = new ArrayList<>();
     }
 
-    public String[] search(String str) {
-        int count = 0;
-        int tempSize = 5;
-        String[] temp = new String[tempSize];
-        for (int i = 0; i < this.mass.length; i++) {
-            if (count < tempSize && mass[i] != null && mass[i].getSearchTerm().contains(str)) {
-                temp[count++] = mass[i].getSearchTerm();
+    public ArrayList<String> search(String str) {
+        ArrayList<String> temp = new ArrayList<>();
+        for (Searchable searchable : mass) {
+            if (searchable != null && searchable.getSearchTerm().contains(str)) {
+                temp.add(searchable.getSearchTerm());
             }
         }
         return temp;
     }
 
     public void add(Searchable o) {
-        for (int i = 0; i < this.size; i++) {
-            if (mass[i] == null) {
-                mass[i] = o;
-                break;
-            }
-        }
-
+        mass.add(o);
     }
 
     public Searchable getMostSuitableObject(String str) throws BestResultFound {
-        int mostSuitableIndex = -1;
+        Searchable mostSuitableObject = null;
         int count = 0;
-        for (int i = 0; i < mass.length; i++) {
-            //Пустые элементы пролистываем.
-            if (mass[i] == null) {
-                continue;
-            }
-
+        for (Searchable searchable : mass) {
             //Берем строку объекта Searchable из массива. Создаем счетчик вхождений.
             int tempCount = 0;
-            StringBuilder s = new StringBuilder(mass[i].getSearchTerm());
+            StringBuilder s = new StringBuilder(searchable.getSearchTerm());
             int tempIndex = s.indexOf(str);
             //Через цикл считаем количество вхождений искомой строки
             while (tempIndex != -1) {
@@ -52,13 +39,13 @@ public class SearchEngine {
             }
             //Если количество вхождений больше, чем запомненное по предыдущим элементам - переприсваемся.
             if (count < tempCount) {
-                mostSuitableIndex = i;
+                mostSuitableObject = searchable;
                 count = tempCount;
             }
         }
         //Если не найдено ниодного вхождения строки ни в одном элементе - выбрасываем исключение.
-        if (mostSuitableIndex != -1) {
-            return mass[mostSuitableIndex];
+        if (mostSuitableObject != null) {
+            return mostSuitableObject;
         } else {
             throw new BestResultFound(String.format("Строка %s не найдена", str));
         }

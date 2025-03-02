@@ -2,20 +2,13 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
+import java.util.*;
+
 public class ProductBasket {
-    private final int SIZE = 5;
-    private Product[] basket = new Product[SIZE];
+    private List<Product> basket = new LinkedList<>();
 
     public void addProduct(Product prod) {
-        boolean flag = false;
-        for (int i = 0; i < SIZE; i++) {
-            if (basket[i] == null) {
-                basket[i] = prod;
-                flag = true;
-                return;
-            }
-        }
-        System.out.println("Невозможно добавить продукт.");
+        basket.add(prod);
     }
 
     public int getBasketPrice() {
@@ -54,21 +47,35 @@ public class ProductBasket {
     }
 
     public boolean checkProduct(String name) {
-        boolean flag = false;
         for (Product product : basket) {
-            if (product != null) {
-                flag = product.getName().equalsIgnoreCase(name);
-                if (flag) {
-                    return flag;
-                }
+            if (product.getName().equalsIgnoreCase(name)) {
+                return true;
             }
         }
-        return flag;
+        return false;
     }
 
     public void cleanBasket() {
-        for (int i = 0; i < SIZE; i++) {
-            basket[i] = null;
+        basket.clear();
+    }
+
+    public LinkedList<Product> removeProduct(String name) {
+        LinkedList<Product> tempList = new LinkedList<>();
+        Iterator<Product> iterator = basket.iterator();
+        int count = 0;
+        while (iterator.hasNext()) {
+            Product temp = iterator.next();
+            if (temp.getName().equalsIgnoreCase(name)) {
+                tempList.add(temp);
+                iterator.remove();
+                count++;
+            }
+        }
+        if (count != 0) {
+            return tempList;
+        } else {
+            System.out.println("Список пуст!");
+            return tempList;
         }
     }
 

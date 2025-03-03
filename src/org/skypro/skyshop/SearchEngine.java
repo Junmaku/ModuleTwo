@@ -9,11 +9,11 @@ public class SearchEngine {
         this.mass = new ArrayList<>();
     }
 
-    public ArrayList<String> search(String str) {
-        ArrayList<String> temp = new ArrayList<>();
+    public ArrayList<Searchable> search(String str) {
+        ArrayList<Searchable> temp = new ArrayList<>();
         for (Searchable searchable : mass) {
             if (searchable != null && searchable.getSearchTerm().contains(str)) {
-                temp.add(searchable.getSearchTerm());
+                temp.add(searchable);
             }
         }
         return temp;

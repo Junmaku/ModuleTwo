@@ -5,40 +5,33 @@ import org.skypro.skyshop.product.Product;
 import java.util.*;
 
 public class ProductBasket {
-    private List<Product> basket = new LinkedList<>();
+    private final Map<String, LinkedList<Product>> basketMap = new HashMap<>();
 
     public void addProduct(Product prod) {
-        basket.add(prod);
+        basketMap.computeIfAbsent(prod.getName(), k -> new LinkedList<>()).add(prod);
     }
 
     public int getBasketPrice() {
         int sum = 0;
-        for (Product product : basket) {
-            if (product != null) {
+        for (LinkedList<Product> products : basketMap.values()) {
+            for (Product product : products) {
                 sum += product.getPrice();
             }
         }
-        if (sum != 0) {
-            return sum;
-        } else {
-            System.out.println("В корзине пусто.");
-            return 0;
-        }
+        return sum;
     }
 
     public void printBasket() {
-        boolean flag = false;
         int count = 0;
-        for (Product product : basket) {
-            if (product != null) {
-                flag = true;
+        for (LinkedList<Product> products : basketMap.values()) {
+            for (Product product : products) {
                 System.out.println(product);
                 if (product.isSpecial()) {
                     count++;
                 }
             }
         }
-        if (!flag) {
+        if (basketMap.isEmpty()) {
             System.out.println("В корзине пусто");
         } else {
             System.out.println("Итого: " + getBasketPrice());
@@ -47,35 +40,33 @@ public class ProductBasket {
     }
 
     public boolean checkProduct(String name) {
-        for (Product product : basket) {
-            if (product.getName().equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-        return false;
+        name = name.trim();
+        return basketMap.containsKey(name);
     }
 
     public void cleanBasket() {
-        basket.clear();
+        basketMap.clear();
     }
 
     public LinkedList<Product> removeProduct(String name) {
         LinkedList<Product> tempList = new LinkedList<>();
-        Iterator<Product> iterator = basket.iterator();
-        int count = 0;
-        while (iterator.hasNext()) {
-            Product temp = iterator.next();
-            if (temp.getName().equalsIgnoreCase(name)) {
-                tempList.add(temp);
-                iterator.remove();
-                count++;
-            }
-        }
-        if (count != 0) {
-            return tempList;
+        if (basketMap.containsKey(name)) {
+            tempList.addAll(basketMap.get(name));
         } else {
-            System.out.println("Список пуст!");
-            return tempList;
+            System.out.println(basketMap.isEmpty() ? "List is empty!" : "Not found product in list");
+        }
+        return tempList;
+    }
+
+    public void removeOneProduct(String name) {
+        if (basketMap.containsKey(name)) {
+            basketMap.get(name).removeFirst();
+            if (basketMap.get(name).isEmpty()) {
+                basketMap.remove(name);
+            }
+            System.out.println("Product is removed");
+        } else {
+            System.out.println(basketMap.isEmpty() ? "List is empty!" : "Not found product in list");
         }
     }
 

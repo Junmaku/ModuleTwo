@@ -6,6 +6,10 @@ public final class Article implements Searchable {
     private final String title;
     private final String text;
 
+    public String getName() {
+        return this.title;
+    }
+
     @Override
     public String getSearchTerm() {
         return this.text;
@@ -37,4 +41,5 @@ public final class Article implements Searchable {
     public String getStringRepresentation() {
         return toString();
     }
+
 }

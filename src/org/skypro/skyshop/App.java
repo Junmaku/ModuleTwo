@@ -35,9 +35,11 @@ public class App {
         poisk.add(text1);
         poisk.add(text2);
         poisk.add(text3);
-        System.out.println(Arrays.toString(poisk.search("popular").toArray()));
-        System.out.println();
-        System.out.println(Arrays.toString(poisk.search("Japan").toArray()));
+        //System.out.println(Arrays.toString(poisk.search("popular").toArray()));
+        System.out.println("Проверка мапы! \n \n");
+        System.out.println((poisk.search("popular")));
+        System.out.println("Проверка мапы! \n \n");
+        //System.out.println(Arrays.toString(poisk.search("Japan").toArray()));
         //hw#4
         try {
             Article text4 = new Article("  ", "One of the most popular car is Toyota from Japan.");
@@ -68,7 +70,9 @@ public class App {
         for (Product product : tempList) {
             System.out.println(product);
         }
+        newBasket.removeOneProduct("Salad");
         System.out.println("Печатаем получившуюся корзину:");
         newBasket.printBasket();
+
     }
 }

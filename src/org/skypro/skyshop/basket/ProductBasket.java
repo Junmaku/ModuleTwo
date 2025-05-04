@@ -2,68 +2,71 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
 
+import java.util.*;
+
 public class ProductBasket {
-    private final int SIZE = 5;
-    private Product[] basket = new Product[SIZE];
+    private final Map<String, LinkedList<Product>> basketMap = new HashMap<>();
 
     public void addProduct(Product prod) {
-        boolean flag = false;
-        for (int i = 0; i < SIZE; i++) {
-            if (basket[i] == null) {
-                basket[i] = prod;
-                flag = true;
-                return;
-            }
-        }
-        System.out.println("Невозможно добавить продукт.");
+        basketMap.computeIfAbsent(prod.getName(), k -> new LinkedList<>()).add(prod);
     }
 
     public int getBasketPrice() {
         int sum = 0;
-        for (Product product : basket) {
-            if (product != null) {
+        for (LinkedList<Product> products : basketMap.values()) {
+            for (Product product : products) {
                 sum += product.getPrice();
             }
         }
-        if (sum != 0) {
-            return sum;
-        } else {
-            System.out.println("В корзине пусто.");
-            return 0;
-        }
+        return sum;
     }
 
     public void printBasket() {
-        boolean flag = false;
-        for (Product product : basket) {
-            if (product != null) {
-                flag = true;
+        int count = 0;
+        for (LinkedList<Product> products : basketMap.values()) {
+            for (Product product : products) {
                 System.out.println(product);
+                if (product.isSpecial()) {
+                    count++;
+                }
             }
         }
-        if (!flag) {
+        if (basketMap.isEmpty()) {
             System.out.println("В корзине пусто");
         } else {
             System.out.println("Итого: " + getBasketPrice());
+            System.out.println(count > 0 ? String.format("Специальных товаров: %d", count) : "");
         }
     }
 
     public boolean checkProduct(String name) {
-        boolean flag = false;
-        for (Product product : basket) {
-            if (product != null) {
-                flag = product.getName().equalsIgnoreCase(name);
-                if (flag) {
-                    return flag;
-                }
-            }
-        }
-        return flag;
+        name = name.trim();
+        return basketMap.containsKey(name);
     }
 
     public void cleanBasket() {
-        for (int i = 0; i < SIZE; i++) {
-            basket[i] = null;
+        basketMap.clear();
+    }
+
+    public LinkedList<Product> removeProduct(String name) {
+        LinkedList<Product> tempList = new LinkedList<>();
+        if (basketMap.containsKey(name)) {
+            tempList.addAll(basketMap.get(name));
+        } else {
+            System.out.println(basketMap.isEmpty() ? "List is empty!" : "Not found product in list");
+        }
+        return tempList;
+    }
+
+    public void removeOneProduct(String name) {
+        if (basketMap.containsKey(name)) {
+            basketMap.get(name).removeFirst();
+            if (basketMap.get(name).isEmpty()) {
+                basketMap.remove(name);
+            }
+            System.out.println("Product is removed");
+        } else {
+            System.out.println(basketMap.isEmpty() ? "List is empty!" : "Not found product in list");
         }
     }
 

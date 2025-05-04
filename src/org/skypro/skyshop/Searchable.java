@@ -10,7 +10,12 @@ public interface Searchable extends Comparable<Searchable> {
 
     @Override
     default int compareTo(Searchable o) {
-        return getName().compareTo(o.getName());
+        int tempInt = Integer.compare(getName().length(), o.getName().length());
+        if (tempInt != 0) {
+            return tempInt;
+        } else {
+            return getName().compareTo(o.getName());
+        }
     }
 
     default String getStringRepresentation() {

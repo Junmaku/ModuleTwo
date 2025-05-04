@@ -35,6 +35,8 @@ public class App {
         poisk.add(text1);
         poisk.add(text2);
         poisk.add(text3);
+        poisk.add(new Article("Hat", "One of most popular firm of hats is Cangol"));
+        poisk.add(new Article("Bar", "One of the most popular bar in St.Petersburg is 1703"));
         //System.out.println(Arrays.toString(poisk.search("popular").toArray()));
         System.out.println("Проверка мапы! \n \n");
         System.out.println((poisk.search("popular")));
@@ -73,6 +75,5 @@ public class App {
         newBasket.removeOneProduct("Salad");
         System.out.println("Печатаем получившуюся корзину:");
         newBasket.printBasket();
-
     }
 }

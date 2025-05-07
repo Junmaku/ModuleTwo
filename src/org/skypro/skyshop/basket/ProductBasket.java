@@ -12,31 +12,31 @@ public class ProductBasket {
     }
 
     public int getBasketPrice() {
-        int sum = 0;
-        for (LinkedList<Product> products : basketMap.values()) {
-            for (Product product : products) {
-                sum += product.getPrice();
-            }
-        }
-        return sum;
+        return basketMap.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .mapToInt(Product::getPrice)
+                .sum();
     }
 
+    private int getSpecialCount() {
+        return (int) basketMap.values()
+                .stream()
+                .flatMap(LinkedList::stream)
+                .filter(Product::isSpecial)
+                .count();
+    }
+
+
     public void printBasket() {
-        int count = 0;
-        for (LinkedList<Product> products : basketMap.values()) {
-            for (Product product : products) {
-                System.out.println(product);
-                if (product.isSpecial()) {
-                    count++;
-                }
-            }
-        }
         if (basketMap.isEmpty()) {
-            System.out.println("В корзине пусто");
-        } else {
-            System.out.println("Итого: " + getBasketPrice());
-            System.out.println(count > 0 ? String.format("Специальных товаров: %d", count) : "");
+            System.out.println("В корзине пусто!");
         }
+        basketMap.values().stream()
+                .flatMap(Collection::stream)
+                .peek(System.out::println);
+        System.out.println("Итого: " + getBasketPrice());
+        System.out.println(getSpecialCount() > 0 ? String.format("Специальных товаров: %d", getSpecialCount()) : "");
     }
 
     public boolean checkProduct(String name) {

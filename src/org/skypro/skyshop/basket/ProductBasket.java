@@ -34,7 +34,7 @@ public class ProductBasket {
         }
         basketMap.values().stream()
                 .flatMap(Collection::stream)
-                .peek(System.out::println);
+                .forEach(prod -> System.out.println(prod));
         System.out.println("Итого: " + getBasketPrice());
         System.out.println(getSpecialCount() > 0 ? String.format("Специальных товаров: %d", getSpecialCount()) : "");
     }
